@@ -54,44 +54,6 @@
         .title-text {
             padding: 0 10px;
         }
-    
-        /* 手機模式 */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-                font-size: 16px; /* 提高基礎字體大小，避免內容過小 */
-            }
-            #terminal {
-                min-height: auto;
-                max-width: 100%;
-            }
-            #input {
-                width: 100%;
-            }
-            img {
-                max-width: 60%;
-            }
-            /* 修正標題與內容的字體大小 */
-            .title-line {
-                flex-wrap: wrap;
-                font-size: 18px; /* 確保 title 比 subtitle 大 */
-            }
-            .title-line::before,
-            .title-line::after {
-                flex: 1;
-                min-width: 20px;
-                height: 1px;
-            }
-            .title-text {
-                padding: 0 5px;
-            }
-            h3:not(.title-line) { /* 針對 subtitle 的 <h3> */
-                font-size: 16px; /* subtitle 稍微小一點，但保持可讀性 */
-            }
-            p { /* 確保普通文字內容不過小 */
-                font-size: 16px;
-            }
-        }
     </style>
 </head>
 <body>

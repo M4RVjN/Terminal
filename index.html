@@ -14,7 +14,6 @@
         }
         #terminal {
             width: 100%;
-            /* max-width: 800px; */
             min-height: 400px;
         }
         .input-line {
@@ -36,30 +35,31 @@
             color: #0f0;
             text-decoration: underline;
         }
-
+    
         .title-line {
             display: flex;
             align-items: center;
             width: 100%;
             margin: 10px 0;
         }
-
+    
         .title-line::before,
         .title-line::after {
             content: '';
-            flex: 1; /* 左右實線均分剩餘空間 */
+            flex: 1;
             height: 2px;
-            background: #0f0; /* 綠色實線，與文字顏色一致 */
+            background: #0f0;
         }
-
+    
         .title-text {
-            padding: 0 10px; /* 文字與實線間的間距 */
+            padding: 0 10px;
         }
-
+    
+        /* 手機模式 */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
-                font-size: 14px;
+                font-size: 16px; /* 提高基礎字體大小，避免內容過小 */
             }
             #terminal {
                 min-height: auto;
@@ -69,21 +69,27 @@
                 width: 100%;
             }
             img {
-                max-width: 60%; /* 手機上圖片可以放大一點 */
+                max-width: 60%;
             }
-            /* 添加針對標題行的調整 */
+            /* 修正標題與內容的字體大小 */
             .title-line {
-                flex-wrap: wrap; /* 允許換行，避免空間不足 */
-                font-size: 16px; /* 適當縮小標題字體 */
+                flex-wrap: wrap;
+                font-size: 18px; /* 確保 title 比 subtitle 大 */
             }
             .title-line::before,
             .title-line::after {
-                flex: 1; /* 保持左右實線均分 */
-                min-width: 20px; /* 確保實線有最小寬度，避免消失 */
-                height: 1px; /* 稍微減小線條高度以適配手機 */
+                flex: 1;
+                min-width: 20px;
+                height: 1px;
             }
             .title-text {
-                padding: 0 5px; /* 減少文字與實線的間距 */
+                padding: 0 5px;
+            }
+            h3:not(.title-line) { /* 針對 subtitle 的 <h3> */
+                font-size: 16px; /* subtitle 稍微小一點，但保持可讀性 */
+            }
+            p { /* 確保普通文字內容不過小 */
+                font-size: 16px;
             }
         }
     </style>

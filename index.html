@@ -71,8 +71,21 @@
             img {
                 max-width: 60%; /* 手機上圖片可以放大一點 */
             }
+            /* 添加針對標題行的調整 */
+            .title-line {
+                flex-wrap: wrap; /* 允許換行，避免空間不足 */
+                font-size: 16px; /* 適當縮小標題字體 */
+            }
+            .title-line::before,
+            .title-line::after {
+                flex: 1; /* 保持左右實線均分 */
+                min-width: 20px; /* 確保實線有最小寬度，避免消失 */
+                height: 1px; /* 稍微減小線條高度以適配手機 */
+            }
+            .title-text {
+                padding: 0 5px; /* 減少文字與實線的間距 */
+            }
         }
-
     </style>
 </head>
 <body>

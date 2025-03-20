@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>C:\Marvin\website\cmd.exe</title>
+    <link rel="shortcut icon" href="./image/marvin.jpg" type="image/x-icon">
+    <style>
+        body {
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+        }
+        #terminal {
+            width: 100%;
+            /* max-width: 800px; */
+            min-height: 400px;
+        }
+        .input-line {
+            display: inline;
+        }
+        #input {
+            background: none;
+            border: none;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            width: 80%;
+            outline: none;
+        }
+        img {
+            max-width: 20%;
+            margin: 10px 0;
+        }
+        a {
+            color: #0f0;
+            text-decoration: underline;
+        }
+
+        .title-line {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .title-line::before,
+        .title-line::after {
+            content: '';
+            flex: 1; /* 左右實線均分剩餘空間 */
+            height: 2px;
+            background: #0f0; /* 綠色實線，與文字顏色一致 */
+        }
+
+        .title-text {
+            padding: 0 10px; /* 文字與實線間的間距 */
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 14px;
+            }
+            #terminal {
+                min-height: auto;
+                max-width: 100%;
+            }
+            #input {
+                width: 100%;
+            }
+            img {
+                max-width: 60%; /* 手機上圖片可以放大一點 */
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <p>Welcome to my website!</p>
+        <p>Type one of these commands: About, Resume, Portfolio, Blog</p>
+        <p>Press Ctrl+L to clear the terminal</p>
+        <div id="prompt-line">$ <span class="input-line"><input type="text" id="input" autofocus></span></div>
+    </div>
+
+    <script>
+        // 內容模組，所有內容統一使用陣列格式
+        const contentModules = {
+            'about': [
+                { type: 'image', content: './image/marvin.jpg' },
+                { type: 'title', content: 'About Me' },
+                { type: 'text', content: 'Welcome to my personal website! I\'m HUANG CHIH-CHENG,' },
+                { type: 'text', content: 'I am currently a student at Ming Chi University of Technology, specializing in Artificial Intelligence. You can visit my website to learn more about me and my projects.' },
+                { type: 'title', content: 'What I\'m Doing' },
+                { type: 'subtitle', content: 'Cyber Security' },
+                { type: 'text', content: 'I am learning cybersecurity skills, including VA and PT' },
+                { type: 'subtitle', content: 'Programming' },
+                { type: 'text', content: 'I have used several programming languages, with Python as my main focus.' },
+                { type: 'title', content: 'Contact Me' },
+                { type: 'subtitle', content: 'Email:' },
+                { type: 'link', url: 'mailto:marvinhuangzhicheng@gmail.com', text: 'marvinhuangzhicheng@gmail.com'},
+                { type: 'subtitle', content: 'GitHub:' },
+                { type: 'link', url: 'https://github.com/M4RVjN' },
+                { type: 'image', content: './image/dog1.gif' },
+            ],
+            'resume': [
+                { type: 'title', content: 'Education' },
+                { type: 'subtitle', content: 'Bachelor\'s Program in Industrial Artificial Intelligence' },
+                { type: 'text', content: '2022-2026' },
+                { type: 'text', content: 'Completed a Bachelor\'s degree in Industrial Artificial Intelligence at Ming Chi University of Technology. Focused on integrating AI technologies with industrial applications.' },
+                { type: 'title', content: 'Experience' },
+                { type: 'subtitle', content: 'Intern at HwaCom Systems Inc.' },
+                { type: 'text', content: '2024-2025' },
+                { type: 'text', content: 'Completed a one-year internship at HwaCom Systems Inc. during my third year of university. Gained practical experience in vulnerability scanning, penetration testing.' },
+                { type: 'subtitle', content: 'President of the Departmental Student Association.' },
+                { type: 'text', content: '2022-2024' },
+                { type: 'text', content: 'Founded the Department Association for the Industrial Artificial Intelligence Program and served as the president for two years.' },
+                { type: 'title', content: 'Certificate & Licenses' },
+                { type: 'subtitle', content: 'iPAS資訊安全工程師-初級' },
+                { type: 'text', content: '經濟部' },
+                { type: 'subtitle', content: '氣壓乙級-中華民國技術士證' },
+                { type: 'text', content: '勞動部' },
+                { type: 'subtitle', content: '機電整合丙級-中華民國技術士證' },
+                { type: 'text', content: '勞動部' },
+                { type: 'image', content: './image/dog2.gif' },
+            ],
+            'portfolio': [
+                { type: 'title', content: 'Portfolio' },
+                { type: 'subtitle', content: 'Desktop Robot' },
+                { type: 'text', content: 'A desktop robot that displays time and weather, interacts with expressions, and adapts its mood based on the environment.'},
+                { type: 'link', url: 'https://www.youtube.com/shorts/h-lsJe-Uydg', text: 'link' },
+                { type: 'subtitle', content: 'ROC PII Scanner' },
+                { type: 'text', content: 'My tool leverages HTTrack to package websites before scanning, primarily using regex for filtering, while incorporating my fine-tuned BERT model for Chinese name detection, and ultimately generating an Excel report on potential PII risks.'},
+                { type: 'link', url: '', text: 'link' }, // 事後補充
+                { type: 'subtitle', content: 'Nessus Report Customization Software' },
+                { type: 'text', content: 'Accelerate department productivity by quickly filtering vulnerabilities based on each client\'s specific needs after a Nessus scan is completed.'},
+                { type: 'link', url: '', text: 'link' }, // 事後補充
+                { type: 'image', content: './image/pacman.gif' },
+            ],
+            'blog': [
+                { type: 'title', content: 'Blog' },
+                { type: 'subtitle', content: 'Google blogger' },
+                { type: 'text', content: 'picoCTF writeup'},
+                { type: 'link', url: 'https://m4rvjn.blogspot.com/', text: 'Blogger' },
+                { type: 'subtitle', content: 'HackMD' },
+                { type: 'text', content: 'Study Notes'},
+                { type: 'link', url: 'https://hackmd.io/@M4RV1N', text: 'HackMD' },
+                { type: 'image', content: './image/duck.gif' },
+            ]
+        };
+
+        const terminal = document.getElementById('terminal');
+
+        // 創建新提示符
+        function createNewPrompt() {
+            const promptLine = document.createElement('div');
+            promptLine.innerHTML = '$ <span class="input-line"><input type="text" id="input" autofocus></span>';
+            promptLine.id = 'prompt-line';
+            terminal.appendChild(promptLine);
+            const newInput = promptLine.querySelector('#input');
+            newInput.focus();
+            newInput.addEventListener('keypress', handleInput); // 直接在這裡綁定事件
+            return newInput;
+        }
+
+        function renderContent(items) {
+            if (!Array.isArray(items)) {
+                const error = document.createElement('p');
+                error.textContent = 'Error: Invalid content format';
+                terminal.appendChild(error);
+                return;
+            }
+
+            items.forEach(item => {
+                if (!item || !item.type) return;
+
+                if (item.type === 'text') {
+                    const output = document.createElement('p');
+                    output.textContent = item.content;
+                    terminal.appendChild(output);
+                } else if (item.type === 'title') { // 主標題
+                    const title = document.createElement('h3');
+                    title.className = 'title-line';
+
+                    // 只保留文字部分，去掉原始虛線
+                    const text = item.content.replace(/─/g, '').trim();
+                    const textSpan = document.createElement('span');
+                    textSpan.className = 'title-text';
+                    textSpan.textContent = text;
+
+                    title.appendChild(textSpan);
+                    terminal.appendChild(title);
+                } else if (item.type === 'subtitle') { // 次標題
+                    const head = document.createElement('h3');
+                    head.textContent = item.content;
+                    terminal.appendChild(head);
+                } else if (item.type === 'image') {
+                    const img = document.createElement('img');
+                    img.src = item.content;
+                    img.alt = 'Content Image';
+                    terminal.appendChild(img);
+                } else if (item.type === 'link') {
+                    const link = document.createElement('a');
+                    link.href = item.url;
+                    link.textContent = item.text || item.url;
+                    link.target = '_blank';
+                    terminal.appendChild(link);
+                    terminal.appendChild(document.createElement('br'));
+                }
+            });
+        }
+
+        // 處理輸入
+        function handleInput(event) {
+            if (event.key === 'Enter') {
+                const input = event.target;
+                const command = input.value.trim().toLowerCase();
+                const commandEcho = document.createElement('p');
+                commandEcho.textContent = '$ ' + input.value;
+                terminal.appendChild(commandEcho);
+
+                if (contentModules.hasOwnProperty(command)) {
+                    renderContent(contentModules[command]);
+                } else {
+                    const output = document.createElement('p');
+                    output.textContent = 'Command not found. Try: About, Resume, Portfolio, Blog';
+                    terminal.appendChild(output);
+                }
+
+                const oldPrompt = document.getElementById('prompt-line');
+                if (oldPrompt) oldPrompt.remove();
+                createNewPrompt(); // 直接調用，不需要額外綁定
+            }
+        }
+
+        // 清空終端
+        function clearTerminal() {
+            while (terminal.firstChild) {
+                terminal.removeChild(terminal.firstChild);
+            }
+            terminal.innerHTML = `
+                <p>Welcome to my website</p>
+                <p>Type one of these commands: About, Resume, Portfolio, Blog</p>
+                <p>Press Ctrl+L to clear the terminal</p>
+            `;
+            createNewPrompt();
+        }
+
+        // 初始化
+        const initialInput = document.getElementById('input');
+        if (initialInput) initialInput.addEventListener('keypress', handleInput);
+
+        // Ctrl+L 清空
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.key.toLowerCase() === 'l') {
+                event.preventDefault();
+                clearTerminal();
+            }
+        });
+    </script>
+</body>
+</html>

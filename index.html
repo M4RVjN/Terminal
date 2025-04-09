@@ -2,6 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C:\Marvin\website\cmd.exe</title>
     <link rel="shortcut icon" href="./image/marvin.jpg" type="image/x-icon">
     <style>
@@ -11,38 +12,46 @@
             font-family: 'Courier New', monospace;
             margin: 0;
             padding: 20px;
+            font-size: 16px;
+            line-height: 1.5;
         }
         #terminal {
             width: 100%;
-            min-height: 400px;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
         .input-line {
             display: inline;
+            width: auto;
         }
         #input {
             background: none;
             border: none;
             color: #0f0;
             font-family: 'Courier New', monospace;
-            width: 80%;
+            width: 100%;
+            max-width: 90vw;
             outline: none;
+            font-size: 1rem;
+            caret-color: #0f0;
+            padding: 2px;
         }
         img {
-            max-width: 20%;
+            max-width: 100%;
+            height: auto;
             margin: 10px 0;
         }
         a {
             color: #0f0;
             text-decoration: underline;
+            word-break: break-all;
         }
-    
         .title-line {
             display: flex;
             align-items: center;
             width: 100%;
             margin: 10px 0;
         }
-    
         .title-line::before,
         .title-line::after {
             content: '';
@@ -50,9 +59,28 @@
             height: 2px;
             background: #0f0;
         }
-    
         .title-text {
             padding: 0 10px;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 14px;
+            }
+            #input {
+                font-size: 0.9rem;
+            }
+            img {
+                max-width: 80%;
+                display: block;
+                margin: 10px auto;
+            }
+            .title-line {
+                flex-wrap: wrap;
+            }
+            .title-text {
+                padding: 0 5px;
+            }
         }
     </style>
 </head>
@@ -65,7 +93,6 @@
     </div>
 
     <script>
-        // 內容模組，所有內容統一使用陣列格式
         const contentModules = {
             'about': [
                 { type: 'image', content: './image/marvin.jpg' },
@@ -112,10 +139,10 @@
                 { type: 'link', url: 'https://www.youtube.com/shorts/h-lsJe-Uydg', text: 'link' },
                 { type: 'subtitle', content: 'ROC PII Scanner' },
                 { type: 'text', content: 'My tool leverages HTTrack to package websites before scanning, primarily using regex for filtering, while incorporating my fine-tuned BERT model for Chinese name detection, and ultimately generating an Excel report on potential PII risks.'},
-                { type: 'link', url: '', text: 'link' }, // 事後補充
+                { type: 'link', url: '', text: 'link' },
                 { type: 'subtitle', content: 'Nessus Report Customization Software' },
                 { type: 'text', content: 'Accelerate department productivity by quickly filtering vulnerabilities based on each client\'s specific needs after a Nessus scan is completed.'},
-                { type: 'link', url: '', text: 'link' }, // 事後補充
+                { type: 'link', url: '', text: 'link' },
                 { type: 'image', content: './image/pacman.gif' },
             ],
             'blog': [
@@ -129,7 +156,6 @@
 
         const terminal = document.getElementById('terminal');
 
-        // 創建新提示符
         function createNewPrompt() {
             const promptLine = document.createElement('div');
             promptLine.innerHTML = '$ <span class="input-line"><input type="text" id="input" autofocus></span>';
@@ -137,7 +163,7 @@
             terminal.appendChild(promptLine);
             const newInput = promptLine.querySelector('#input');
             newInput.focus();
-            newInput.addEventListener('keypress', handleInput); // 直接在這裡綁定事件
+            newInput.addEventListener('keypress', handleInput);
             return newInput;
         }
 
@@ -156,19 +182,16 @@
                     const output = document.createElement('p');
                     output.textContent = item.content;
                     terminal.appendChild(output);
-                } else if (item.type === 'title') { // 主標題
+                } else if (item.type === 'title') {
                     const title = document.createElement('h3');
                     title.className = 'title-line';
-
-                    // 只保留文字部分，去掉原始虛線
                     const text = item.content.replace(/─/g, '').trim();
                     const textSpan = document.createElement('span');
                     textSpan.className = 'title-text';
                     textSpan.textContent = text;
-
                     title.appendChild(textSpan);
                     terminal.appendChild(title);
-                } else if (item.type === 'subtitle') { // 次標題
+                } else if (item.type === 'subtitle') {
                     const head = document.createElement('h3');
                     head.textContent = item.content;
                     terminal.appendChild(head);
@@ -188,7 +211,6 @@
             });
         }
 
-        // 處理輸入
         function handleInput(event) {
             if (event.key === 'Enter') {
                 const input = event.target;
@@ -207,11 +229,10 @@
 
                 const oldPrompt = document.getElementById('prompt-line');
                 if (oldPrompt) oldPrompt.remove();
-                createNewPrompt(); // 直接調用，不需要額外綁定
+                createNewPrompt();
             }
         }
 
-        // 清空終端
         function clearTerminal() {
             while (terminal.firstChild) {
                 terminal.removeChild(terminal.firstChild);
@@ -224,11 +245,9 @@
             createNewPrompt();
         }
 
-        // 初始化
         const initialInput = document.getElementById('input');
         if (initialInput) initialInput.addEventListener('keypress', handleInput);
 
-        // Ctrl+L 清空
         document.addEventListener('keydown', function(event) {
             if (event.ctrlKey && event.key.toLowerCase() === 'l') {
                 event.preventDefault();
